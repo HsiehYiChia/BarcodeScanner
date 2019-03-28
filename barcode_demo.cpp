@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <vector>
+#include <string>
+#include <opencv2/opencv.hpp>
+#include "BarcodeDetector.h"
+#include "BarcodeDecoder.h"
+
+using namespace cv;
+using namespace std;
+using namespace bd;
+
+void usage(char** argv)
+{
+    printf("usage: %s <Image_path>\n", argv[0]);
+}
+
+int main(int argc, char** argv )
+{
+    if ( argc != 2 )
+    {
+        usage(argv);
+        return -1;
+    }
+    Mat img;
+    img = imread( argv[1], 1 );
+    imshow("barcode image", img);
+    waitKey(0);
+    return 0;
+}
