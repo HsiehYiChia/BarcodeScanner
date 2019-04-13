@@ -6,8 +6,16 @@
 //-----------------------------------------------------------------------------
 #include <vector>
 //-----------------------------------------------------------------------------
-typedef std::vector<cv::Point> BarcodeLoc;
-typedef std::vector<BarcodeLoc> BarcodeLocVec;
+struct BarcodeBoundingBox{
+	cv::Point leftTop;
+	cv::Point rightTop;
+	cv::Point rightBottom;
+	cv::Point leftBottom;
+};
+//-----------------------------------------------------------------------------
+typedef std::vector<BarcodeBoundingBox> BarcodeLocation;
+typedef std::vector<BarcodeLocation> BarcodeLocationVec;
+typedef std::vector<cv::Mat> BarcodeImageVec;
 //-----------------------------------------------------------------------------
 
 // bd stands for Barcode Detector and Barcode Decodor
@@ -34,8 +42,21 @@ protected:
 	BarcodeType m_Type;
 
 public:
-	virtual BarcodeLocVec Detect(cv::Mat image) = 0;
-	virtual cv::Mat NormalizeImage(cv::Mat image) = 0;
+	virtual BarcodeImageVec Detect(const cv::Mat &image) = 0;
+	virtual BarcodeImageVec NormalizeImage(const BarcodeImageVec &images) = 0;
+};
+
+//-----------------------------------------------------------------------------
+class QRCodeDetector : public BarcodeDetector 
+{
+public:
+	BarcodeImageVec Detect(const cv::Mat &image);
+
+private:
+	cv::Mat PreProcess(const cv::Mat &image);
+	BarcodeLocationVec LocateBarcode(const cv::Mat &image);
+	BarcodeImageVec CropBarcode(const cv::Mat &image, BarcodeLocationVec locations);
+	BarcodeImageVec NormalizeImage(const BarcodeImageVec &images);
 };
 
 }
