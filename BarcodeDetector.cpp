@@ -1,5 +1,8 @@
 #include "BarcodeDetector.h"
-
+//-----------------------------------------------------------------------------
+using namespace cv;
+using namespace std;
+//-----------------------------------------------------------------------------
 namespace bd
 {
 
@@ -17,22 +20,27 @@ void BarcodeDetector::SetBarcodeType(BarcodeType type)
 	m_Type = type;
 }
 
-BarcodeLocationVec QRCodeDetector::Detect(const cv::Mat &image)
+//-----------------------------------------------------------------------------
+BarcodeImageVec QRCodeDetector::Detect(const cv::Mat &image)
 {
 	std::string functionName = "[QRCodeDetector::Detect]";
-	BarcodeLocationVec result;
+	BarcodeImageVec result;
 	try
 	{
 		//step0, check input image
 		if (image.empty())	throw std::exception("Input image is empty!");
 		
-		//step1, do some image process, including white balance, sharpening, canny
+		//step1, do some image process
 		cv::Mat processedImage = PreProcess(image);
 
 		//step2, get the location of the barcodes
-		result = LocateBarcode(processedImage);
+		BarcodeLocationVec barcodeLactions = LocateBarcode(processedImage);
 
-		return result;
+		//step3, crop the barcodes
+		BarcodeImageVec barcodeImages = CropBarcode(processedImage, barcodeLactions);
+
+		//step4, normalize the barcode images
+		return NormalizeImage(barcodeImages);
 	}
 	catch (std::exception &ex) {
 		std::cout << "[Error]" << functionName << " : " << ex.what() << std::endl;
@@ -42,12 +50,46 @@ BarcodeLocationVec QRCodeDetector::Detect(const cv::Mat &image)
 
 cv::Mat QRCodeDetector::PreProcess(const cv::Mat &image)
 {
-	return cv::Mat();
+	std::string functionName = "[QRCodeDetector::PreProcess]";
+	Mat result;
+	try
+	{
+		int imageWidth = image.size().width;
+		int imageHeight = image.size().height;
+
+		//sharpenize the image
+		cv::Size ksize = cv::Size(0, 0);
+		double sigmaX = 3.0, sigmaY = 3.0;
+		GaussianBlur(image, result, ksize, sigmaX, sigmaY);
+		addWeighted(image, 1.5, result, -0.5, 0, result);
+
+		//binary the image by adaptive threshold
+		int blockSize = imageWidth < imageHeight ? imageWidth / 10.0 : imageHeight / 10.0;
+		blockSize = blockSize % 2 == 0 ? blockSize + 1 : blockSize;
+		if (result.channels() == 3) cvtColor(result, result, CV_BGR2GRAY);
+		adaptiveThreshold(result, result, 255.0, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, blockSize, 0);
+
+		return result;
+	}
+	catch (std::exception &ex) {
+		std::cout << "[Error]" << functionName << " : " << ex.what() << std::endl;
+		throw ex;
+	}
 }
 
 BarcodeLocationVec QRCodeDetector::LocateBarcode(const cv::Mat &image)
 {
 	return BarcodeLocationVec();
+}
+
+BarcodeImageVec QRCodeDetector::CropBarcode(const cv::Mat &image, BarcodeLocationVec locations)
+{
+	return BarcodeImageVec();
+}
+
+BarcodeImageVec QRCodeDetector::NormalizeImage(const BarcodeImageVec &images)
+{
+	return BarcodeImageVec();
 }
 
 }
