@@ -7,7 +7,7 @@ How to build?
 2. add `C:\opencv\build\x64\vc14\bin` to [System Variable Path](https://www.computerhope.com/issues/ch000549.htm)
 3. Use `cmake` to create Visual Studio Project
 ```sh
-cd Scene-text-recognition
+cd BarcodeScanner
 mkdir build
 cd build
 cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release ..
@@ -19,7 +19,7 @@ cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release ..
 1. Install opencv, refer to [OpenCV Installation in Linux](https://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html)
 2. Use `cmake` to create Makefile, and `make`
 ```sh
-cd Scene-text-recognition
+cd BarcodeScanner
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
