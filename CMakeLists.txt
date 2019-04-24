@@ -15,7 +15,7 @@ endif()
 
 add_executable(barcode_demo 
                 barcode_demo.cpp 
-                BarcodeDetector.cpp
+                #BarcodeDetector.cpp
                 BarcodeDecoder.cpp)
 target_include_directories(barcode_demo PRIVATE ${OpenCV_INCLUDE_DIRS} ) 
 target_link_libraries(barcode_demo ${OpenCV_LIBS})
