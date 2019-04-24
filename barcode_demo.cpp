@@ -23,7 +23,11 @@ int main(int argc, char** argv )
     }
     Mat img;
     img = imread( argv[1], 1 );
-    imshow("barcode image", img);
-    waitKey(0);
-    return 0;
+
+		//Start detect
+		//-------------------------------------------------------------------------
+		QRCodeDetector detector;
+		detector.Detect(img);
+    
+		return 0;
 }

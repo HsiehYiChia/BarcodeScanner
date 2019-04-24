@@ -1,5 +1,7 @@
 #include "BarcodeDetector.h"
 //-----------------------------------------------------------------------------
+#include <stdexcept>
+//-----------------------------------------------------------------------------
 using namespace cv;
 using namespace std;
 //-----------------------------------------------------------------------------
@@ -28,7 +30,7 @@ BarcodeImageVec QRCodeDetector::Detect(const cv::Mat &image)
 	try
 	{
 		//step0, check input image
-		if (image.empty())	throw std::exception("Input image is empty!");
+		if (image.empty())	throw std::runtime_error("Input image is empty!");
 		
 		//step1, do some image process
 		cv::Mat processedImage = PreProcess(image);
@@ -42,7 +44,7 @@ BarcodeImageVec QRCodeDetector::Detect(const cv::Mat &image)
 		//step4, normalize the barcode images
 		return NormalizeImage(barcodeImages);
 	}
-	catch (std::exception &ex) {
+	catch (std::runtime_error &ex) {
 		std::cout << "[Error]" << functionName << " : " << ex.what() << std::endl;
 		throw ex;
 	}
@@ -71,7 +73,7 @@ cv::Mat QRCodeDetector::PreProcess(const cv::Mat &image)
 
 		return result;
 	}
-	catch (std::exception &ex) {
+	catch (std::runtime_error &ex) {
 		std::cout << "[Error]" << functionName << " : " << ex.what() << std::endl;
 		throw ex;
 	}
