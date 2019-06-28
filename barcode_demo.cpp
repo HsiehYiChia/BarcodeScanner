@@ -24,10 +24,15 @@ int main(int argc, char** argv )
     Mat img;
     img = imread( argv[1], 1 );
 
-		//Start detect
-		//-------------------------------------------------------------------------
-		QRCodeDetector detector;
-		detector.Detect(img);
+	//Start detect
+	//-------------------------------------------------------------------------
+	QRCodeDetector detector;
+	detector.Detect(img);
+
+
+
+    BarcodeDecoder decoder;
+    decoder.Decode(img);
     
-		return 0;
+	return 0;
 }

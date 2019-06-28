@@ -18,7 +18,6 @@ class BarcodeDecoder
 {
 private:
     std::vector<Finder> finder; /* There should be exactly 3 finder */
-    std::vector<Finder> locate_finder(cv::Mat barcode_img);
 public:
     BarcodeDecoder();
     ~BarcodeDecoder();
