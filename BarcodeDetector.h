@@ -2,7 +2,7 @@
 #define _BARCODE_DETECTOR_
 #pragma once
 //-----------------------------------------------------------------------------
-#include "opencv2\opencv.hpp"
+#include <opencv2/opencv.hpp>
 //-----------------------------------------------------------------------------
 #include <vector>
 //-----------------------------------------------------------------------------
@@ -36,10 +36,6 @@ public:
 public:
 	BarcodeDetector();
 	~BarcodeDetector();
-	void SetBarcodeType(BarcodeType type);
-
-protected:
-	BarcodeType m_Type;
 
 public:
 	virtual BarcodeImageVec Detect(const cv::Mat &image) = 0;
@@ -51,12 +47,12 @@ class QRCodeDetector : public BarcodeDetector
 {
 public:
 	BarcodeImageVec Detect(const cv::Mat &image);
+	BarcodeImageVec NormalizeImage(const BarcodeImageVec &images);
 
 private:
 	cv::Mat PreProcess(const cv::Mat &image);
 	BarcodeLocationVec LocateBarcode(const cv::Mat &image);
 	BarcodeImageVec CropBarcode(const cv::Mat &image, BarcodeLocationVec locations);
-	BarcodeImageVec NormalizeImage(const BarcodeImageVec &images);
 };
 
 }
